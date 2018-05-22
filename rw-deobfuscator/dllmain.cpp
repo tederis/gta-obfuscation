@@ -1,12 +1,3 @@
-/*******************************************************
-* Copyright (C) 2016 TEDERIs <xcplay@gmail.com>
-*
-* This file is part of RWDeobfuscator.
-*
-* RWObfuscator can not be copied and/or distributed without the express
-* permission of TEDERIs.
-*******************************************************/
-
 #include <windows.h>
 #include <math.h>
 #include <stdlib.h> 
@@ -31,9 +22,9 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	return TRUE;
 }
 
-#define PARTS_NUM 6 // Количество частей, на которое разобран файл
-#define VARIANT_KEY 23 // Ключ для дешифровки варианта перестановки в теле файла
-#define TEMP_BUFFER_SIZE 8388608 // Макимальный размер зашифрованного файла
+#define PARTS_NUM 6 // A number of parts for assets decomposing
+#define VARIANT_KEY 23 // The key for permutation value
+#define TEMP_BUFFER_SIZE 8388608 // The max size of obfuscated file
 #define XR_SWAP(x,y) temp = *x; *x = *y; *y = temp
 unsigned *permLookup;
 char* tempBuffer;
@@ -78,29 +69,29 @@ void ConvertBufferToObjectHandler()
 	DWORD oldProt;
 	VirtualProtect((LPVOID)xrFilePointer, 0x1000, PAGE_EXECUTE_READWRITE, &oldProt);
 
-	// Проверим, зашифрован файл или нет
+	// Check the obfuscation flag
 	if (*((unsigned*)xrFilePointer) == 0x18D5E82)
 	{
-		// Читаем размер и номер перестановки
+		// Read size and permutation number
 		xrFilePointer += 4;
 		unsigned fileSize = *((unsigned*)xrFilePointer);
 		xrFilePointer += 4;
 		unsigned variant = *((unsigned*)xrFilePointer);
-		variant /= VARIANT_KEY; // Дешифруем номер перестановки
+		variant /= VARIANT_KEY; // Unpack the permutation value
 		xrFilePointer += 4;
 
 		unsigned partSize = floor(fileSize / PARTS_NUM);
 		unsigned totalPartsSize = partSize * PARTS_NUM;
 		unsigned tailSize = fileSize - totalPartsSize;
 
-		// Копируем во временный буфер
+		// Copy to temporary buffer
 		memcpy(tempBuffer, xrFilePointer, fileSize);
 
-		// Строим исходный файл
+		// Build the default asset
 		unsigned* permPtr = permLookup + variant*PARTS_NUM;
 		for (unsigned i = 0; i < PARTS_NUM; i++)
 		{
-			// Переходим к чанку в исходном файле
+			// Move to default chunk
 			unsigned chunkIndex = permPtr[i];
 			memcpy(xrFilePointer + chunkIndex*partSize, tempBuffer + i*partSize, partSize);
 		}
@@ -138,16 +129,16 @@ void _declspec(naked) HOOK_CStreaming_ConvertBufferToObject()
 
 void HookInit()
 {
-	// Строим перестановки
+	// Build the look table for permutations
 	unsigned totalVariants = fact(PARTS_NUM);
 	unsigned perm[PARTS_NUM];
 	for (unsigned i = 0; i < PARTS_NUM; i++)
 		perm[i] = i;
 	unsigned* tempPtr = permLookup = new unsigned[totalVariants*PARTS_NUM];
 	permute(perm, 0, PARTS_NUM - 1);
-	permLookup = tempPtr; // Восстановим указатель
+	permLookup = tempPtr; // Restore the pointer
 
-	// Выделяем буфер для восстановления файла
+	// Allocate a place for our buffer
 	tempBuffer = (char*)malloc(TEMP_BUFFER_SIZE);
 
 	DWORD oldProt;
