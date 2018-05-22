@@ -1,12 +1,3 @@
-/*******************************************************
-* Copyright (C) 2016 TEDERIs <xcplay@gmail.com>
-*
-* This file is part of RWObfuscator.
-*
-* RWObfuscator can not be copied and/or distributed without the express
-* permission of TEDERIs.
-*******************************************************/
-
 #include <stdio.h>
 #include <tchar.h>
 
@@ -18,8 +9,8 @@
 
 using namespace std;
 
-#define PARTS_NUM 6 // Количество частей, на которое разобран файл
-#define VARIANT_KEY 23 // Ключ для дешифровки варианта перестановки в теле файла
+#define PARTS_NUM 6 // A number of parts for assets decomposing
+#define VARIANT_KEY 23 // The key for permutation value
 #define XR_SWAP(x,y) temp = *x; *x = *y; *y = temp
 
 long double fact(int N)
@@ -61,7 +52,7 @@ int main(int argc, char *argv[])
 	}
 
 	/*
-		Читаем исходный файл
+		Read a source file
 	*/
 	ifstream in(argv[1], ios::binary | ios::ate);
 	if (in.fail()) {
@@ -78,12 +69,12 @@ int main(int argc, char *argv[])
 	unsigned totalPartsSize = partSize * PARTS_NUM;
 	unsigned tailSize = fileSize - totalPartsSize;
 	
-	// Вычисляем случайную комбинацию
+	// Calculate a random permutation key
 	unsigned totalVariants = fact(PARTS_NUM);
 	srand((unsigned)time(NULL) + fileSize);
 	unsigned variant = rand() % totalVariants;
 
-	// Строим массив всех вариаций
+	// Build an auxiliary array
 	unsigned perm[PARTS_NUM];
 	for (unsigned i = 0; i < PARTS_NUM; i++)
 	{
@@ -95,7 +86,7 @@ int main(int argc, char *argv[])
 	permute(perm, &tempPtr, 0, PARTS_NUM-1);
 
 	/* 
-		Записываем зашифрованный файл
+		Build
 	*/
 	ofstream out(argv[2], ios::binary);
 	if (out.fail()) {
@@ -103,15 +94,15 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	writeUInt32(0x18D5E82, out); // Идентификатор, указывающий что файл зашифрован
-	writeUInt32(fileSize, out); // Размер файла
-	writeUInt32(variant * VARIANT_KEY, out); // Закодированная вариация перестановки
+	writeUInt32(0x18D5E82, out); // Our flag for the deobfuscator
+	writeUInt32(fileSize, out); // File size
+	writeUInt32(variant * VARIANT_KEY, out); // Permutation key
 
 	char* buf = (char*)malloc(partSize);
 	unsigned* permPtr = permLookup + variant*PARTS_NUM;
 	for (unsigned i = 0; i < PARTS_NUM; i++)
 	{
-		// Переходим к чанку в исходном файле
+		// Move to a chunk in an default asset
 		unsigned chunkIndex = permPtr[i];
 		in.seekg(chunkIndex * partSize, ios_base::beg);
 
@@ -119,7 +110,7 @@ int main(int argc, char *argv[])
 		out.write(buf, partSize);
 	}
 
-	// Записываем хвост
+	// Write a tail
 	in.seekg(totalPartsSize, ios_base::beg);
 	in.read(buf, tailSize);
 	out.write(buf, tailSize);
