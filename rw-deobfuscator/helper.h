@@ -1,12 +1,3 @@
-/*******************************************************
-* Copyright (C) 2016 TEDERIs <xcplay@gmail.com>
-*
-* This file is part of RWDeobfuscator.
-*
-* RWObfuscator can not be copied and/or distributed without the express
-* permission of TEDERIs.
-*******************************************************/
-
 #pragma once
 
 typedef int BOOL;
