@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
 	cout << "start parsing " << argv[1] << endl;
 
-	fpos_t fileSize = in.tellg().seekpos();
+	fpos_t fileSize = in.tellg();
 	in.seekg(0, ios_base::beg);
 	
 	unsigned partSize = floor(fileSize / PARTS_NUM);
