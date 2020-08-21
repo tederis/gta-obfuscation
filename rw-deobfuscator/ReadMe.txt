@@ -4,6 +4,11 @@
 -------------------------------------------------
 
 *******************
+** BUILDING
+*******************
+It should be compiled strictly targeting Win32
+
+*******************
 ** SETTINGS
 *******************
 Notice that in the source code these definitions are default:   
