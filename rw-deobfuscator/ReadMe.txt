@@ -4,6 +4,11 @@
 -------------------------------------------------
 
 *******************
+** BUILDING
+*******************
+It should be compiled strictly targeting Win32
+
+*******************
 ** SETTINGS
 *******************
 Notice that in the source code these definitions are default:   
@@ -13,7 +18,7 @@ Notice that in the source code these definitions are default:
 
 What is it?
 ---------------
-This is a simple deobfuscation library that should injects to a game process.
+This is a simple deobfuscation library is being injected into the game process.
 
 How do use it?
 ------------------

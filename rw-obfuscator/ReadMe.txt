@@ -16,4 +16,4 @@ This is a simple obfuscation program to permutate parts of game assets nested in
 
 How do use it?
 ------------------
-Just compile it and run the RWObfuscator.exe executable. A syntax is following: RWObfuscator.exe input_file output_file
+Just compile it and run the RWObfuscator.exe executable. The syntax is following: RWObfuscator.exe input_file output_file
