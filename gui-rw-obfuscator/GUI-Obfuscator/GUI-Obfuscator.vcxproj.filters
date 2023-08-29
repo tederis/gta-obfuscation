@@ -18,8 +18,15 @@
     <ClInclude Include="RWObfuscator.hpp">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI-Obfuscator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GUI-Obfuscator.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico" />
   </ItemGroup>
 </Project>

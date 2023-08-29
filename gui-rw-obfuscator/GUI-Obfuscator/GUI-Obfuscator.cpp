@@ -1,6 +1,7 @@
 #include "Header.h"
 #include "RWObfuscator.hpp"
 
+#include "resource.h"
 
 
 
@@ -17,14 +18,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	WndClass.cbWndExtra = 0;
 	WndClass.cbClsExtra = 0;
 	WndClass.hInstance = hInstance;
-	WndClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
+	WndClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	WndClass.hbrBackground = CreateSolidBrush(RGB(245, 245, 245));
 	WndClass.lpszMenuName = NULL;
-	WndClass.hIconSm = LoadIcon(WndClass.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
+	WndClass.hIconSm = LoadIcon(WndClass.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	WndClass.lpfnWndProc = WndProc;
-	WndClass.lpszClassName = WndClassName;
-	RegisterClassEx(&WndClass);
+    WndClass.lpszClassName = WndClassName;
+    RegisterClassEx(&WndClass);
 
 	MainFont = CreateFontW(17, 7, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, OUT_TT_ONLY_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, DEFAULT_PITCH, L"Helvetica");
 	LabelsFont = CreateFontW(16, 6, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, OUT_TT_ONLY_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, DEFAULT_PITCH, L"Helvetica");
@@ -62,7 +63,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC Writer;
     PAINTSTRUCT Pstr;
-
     switch (message)
     {
     case WM_DESTROY:

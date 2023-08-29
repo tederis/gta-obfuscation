@@ -148,10 +148,17 @@
     <ClInclude Include="BinaryIOHelpers.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RWObfuscator.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GUI-Obfuscator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GUI-Obfuscator.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
